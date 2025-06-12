@@ -1,0 +1,19 @@
+{
+  "Repo": {
+    "remoteUrl": "https://github.com/aadityazero/test3.git",
+    "languages": ["js", "ts"]
+  },
+  "IntegrationTest": {
+    "fileContent": "import authHeader from '../../src/utils/data-service/auth-header';\n\ndescribe('Integration: authHeader workflow', () => {\n  beforeEach(() => {\n    global.localStorage = {\n      getItem: jest.fn(),\n      setItem: jest.fn(),\n      removeItem: jest.fn(),\n    };\n  });\n\n  it('returns Authorization header when user token exists', () => {\n    const user = { token: 'faketoken123' };\n    localStorage.getItem.mockReturnValue(JSON.stringify(user));\n    expect(authHeader()).toEqual({ Authorization: 'Bearer faketoken123' });\n  });\n\n  it('returns empty object when no user token', () => {\n    localStorage.getItem.mockReturnValue(null);\n    expect(authHeader()).toEqual({});\n  });\n});\n"
+  },
+  "IntegrationTestRun": {
+    "id": "run-03",
+    "commitId": "26768c6a7830b434842b3334a80521d2bb8c8842",
+    "result": {
+      "stdout": " PASS  tests/integration/authHeaderWorkflow.test.js\n  Integration: authHeader workflow                 \n    ✓ returns Authorization header when user token exists (1 ms)\n    ✓ returns empty object when no user token      \n                                                   \nTest Suites: 1 passed, 1 total                     \nTests:       2 passed, 2 total                     \nSnapshots:   0 total\nTime:        0.298 s\nRan all test suites matching tests/integration/authHeaderWorkflow.test.js.",
+      "stderr": "",
+      "returnCode": 0
+    },
+    "pass": true
+  }
+}
