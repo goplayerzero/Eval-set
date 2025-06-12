@@ -1,0 +1,45 @@
+{
+  "Repo": {
+    "remoteUrl": "https://github.com/hacs/integration.git",
+    "languages": ["py"]
+  },
+  "IntegrationTest": {
+    "fileContent": "import sys\nimport logging\nfrom unittest.mock import MagicMock, patch\n\nfrom homeassistant.components.websocket_api import DOMAIN as WEBSOCKET_DOMAIN\nfrom homeassistant.core import HomeAssistant\nimport pytest\n\nfrom custom_components.hacs.base import HacsBase\n\nfrom tests.common import create_config_entry, get_hacs\nfrom tests.conftest import SnapshotFixture\n\n# Configure logging\nlogging.basicConfig(level=logging.INFO)\nlogger = logging.getLogger(__name__)\n\nasync def test_integration_setup(\n    hass: HomeAssistant,\n    snapshots: SnapshotFixture,\n):\n    logger.info(\"Starting test_integration_setup\")\n    config_entry = create_config_entry()\n    logger.info(f\"Created config entry: {config_entry.entry_id}\")\n    \n    hass.data.pop(\"custom_components\", None)\n    logger.info(\"Cleared custom_components from hass.data\")\n    \n    config_entry.add_to_hass(hass)\n    logger.info(\"Added config entry to hass\")\n    \n    setup_result = await hass.config_entries.async_setup(config_entry.entry_id)\n    logger.info(f\"Config entry setup result: {setup_result}\")\n    assert setup_result\n    await hass.async_block_till_done()\n    logger.info(\"Hass async operations completed\")\n\n    hacs: HacsBase = get_hacs(hass)\n    logger.info(f\"HACS system status - disabled: {hacs.system.disabled}, stage: {hacs.stage}\")\n    assert not hacs.system.disabled\n    assert hacs.stage == \"running\"\n\n    websocket_commands = [\n        command for command in hass.data[WEBSOCKET_DOMAIN] if command.startswith(\"hacs/\")\n    ]\n    logger.info(f\"Found HACS websocket commands: {websocket_commands}\")\n\n    await snapshots.assert_hacs_data(\n        hacs,\n        \"test_integration_setup.json\",\n        {\n            \"websocket_commands\": websocket_commands,\n        },\n    )\n    logger.info(\"Snapshot assertion completed successfully\")\n\n\nasync def test_integration_setup_with_custom_updater(\n    hass: HomeAssistant,\n    snapshots: SnapshotFixture,\n    caplog: pytest.LogCaptureFixture,\n):\n    logger.info(\"Starting test_integration_setup_with_custom_updater\")\n    config_entry = create_config_entry()\n    logger.info(f\"Created config entry: {config_entry.entry_id}\")\n    \n    hass.data.pop(\"custom_components\", None)\n    logger.info(\"Cleared custom_components from hass.data\")\n    \n    config_entry.add_to_hass(hass)\n    logger.info(\"Added config entry to hass\")\n    \n    with patch.dict(\n        sys.modules,\n        {\n            **sys.modules,\n            # Pretend custom_updater is loaded\n            \"custom_components.custom_updater\": MagicMock(),\n        },\n    ):\n        logger.info(\"Patched sys.modules to include custom_updater\")\n        setup_result = await hass.config_entries.async_setup(config_entry.entry_id)\n        logger.info(f\"Config entry setup result: {setup_result}\")\n        assert not setup_result\n        await hass.async_block_till_done()\n        logger.info(\"Hass async operations completed\")\n\n    hacs: HacsBase = get_hacs(hass)\n    logger.info(f\"HACS system status - disabled_reason: {hacs.system.disabled_reason}\")\n    assert hacs.system.disabled_reason == \"constrains\"\n\n    expected_message = \"HACS cannot be used with custom_updater. To use HACS you need to remove custom_updater from `custom_components`\"\n    logger.info(f\"Checking for expected message in logs: {expected_message}\")\n    assert expected_message in caplog.text\n    logger.info(\"Found expected message in logs\")\n\n    await snapshots.assert_hacs_data(\n        hacs,\n        \"test_integration_setup_with_custom_updater.json\",\n        {},\n    )\n    logger.info(\"Snapshot assertion completed successfully\")"
+  },
+  "IntegrationTestRun": {
+    "id": "run-003",
+    "commitId": "e04d8c8fcce81d3e9e1abd4c47ccc1eaf1bac9f7",
+    "result": {
+      "stdout": "platform darwin -- Python 3.13.0, pytest-8.4.0, pluggy-1.6.0 -- /Library/Frameworks/Python.framework/Versions/3.13/bin/python3\ncachedir: .pytest_cache\nrootdir: /Users/aadityasubedi/Desktop/eval-set/repo3/integration\nconfigfile: pyproject.toml\nplugins: snapshot-0.9.0, anyio-4.9.0, socket-0.7.0, asyncio-0.26.0, cov-6.1.1\nasyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollected 2 items\n\ntests/integration/test_integration_setup.py::test_integration_setup PASSED                           [ 50%]\ntests/integration/test_integration_setup.py::test_integration_setup_with_custom_updater PASSED       [100%]\n\n_____________________________ coverage: platform darwin, python 3.13.0-final-0 _____________________________\n\nCoverage XML written to file coverage.xml\n============================================ 2 passed in 0.42s =============================================",
+      "stderr": "",
+      "returnCode": 0,
+      "logs": {
+        "test_integration_setup": [
+          "Starting test_integration_setup",
+          "Created config entry: 01JXJWX3BPC62D620DGYNG2R8H",
+          "Cleared custom_components from hass.data",
+          "Added config entry to hass",
+          "Config entry setup result: True",
+          "Hass async operations completed",
+          "HACS system status - disabled: False, stage: running",
+          "Found HACS websocket commands: ['hacs/info', 'hacs/subscribe', 'hacs/repository/info', 'hacs/repository/download', 'hacs/repository/ignore', 'hacs/repository/state', 'hacs/repository/version', 'hacs/repository/beta', 'hacs/repository/refresh', 'hacs/repository/release_notes', 'hacs/repository/remove', 'hacs/critical/acknowledge', 'hacs/critical/list', 'hacs/repositories/list', 'hacs/repositories/add', 'hacs/repositories/clear_new', 'hacs/repositories/removed', 'hacs/repositories/remove', 'hacs/repository/releases']",
+          "Snapshot assertion completed successfully"
+        ],
+        "test_integration_setup_with_custom_updater": [
+          "Starting test_integration_setup_with_custom_updater",
+          "Created config entry: 01JXJWX3FTW62QC45NFJNATCQ9",
+          "Cleared custom_components from hass.data",
+          "Added config entry to hass",
+          "Patched sys.modules to include custom_updater",
+          "Config entry setup result: False",
+          "Hass async operations completed",
+          "HACS system status - disabled_reason: constrains",
+          "Checking for expected message in logs: HACS cannot be used with custom_updater. To use HACS you need to remove custom_updater from `custom_components`",
+          "Found expected message in logs",
+          "Snapshot assertion completed successfully"
+        ]
+      }
+    },
+    "pass": true
+  }
+} 
