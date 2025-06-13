@@ -1,9 +1,0 @@
-FROM golang:1.12
-
-# Git is already installed in the Debian-based image
-
-# Set working directory
-WORKDIR /go/src/github.com/george-e-shaw-iv/integration-tests-example/
-
-# Run tests
-CMD CGO_ENABLED=0 go test ./...
