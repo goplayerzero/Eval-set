@@ -1,0 +1,19 @@
+{
+    "Repo": {
+      "remoteUrl": "https://github.com/lefou/mill-integrationtest.git",
+      "languages": ["scala"]
+    },
+    "IntegrationTest": {
+      "fileContent": "package de.tobiasroeser.mill.integrationtest\n\nimport java.nio.file.{CopyOption, LinkOption, StandardCopyOption}\nimport java.nio.file.attribute.PosixFilePermission\nimport scala.util.Try\nimport scala.util.control.NonFatal\nimport mainargs.Flag\nimport mill._\nimport mill.api.{Ctx, Result}\nimport mill.define.{Command, Sources, Target, Task, TaskModule}\nimport mill.scalalib._\nimport mill.scalalib.publish._\nimport os.ProcessOutput.Readlines\nimport os.{PathRedirect, ProcessOutput}\n\n/**\n * Run Integration test for Mill Plugins.\n */\ntrait MillIntegrationTestModule extends TaskModule with ExtraCoursierSupport with MillIntegrationTestModulePlatform {\n\n  import MillIntegrationTestModule._\n\n  /** Denotes the command which is called when no target in given on the commandline. */\n  def defaultCommandName() = \"test\"\n\n  /**\n   * Locations where integration tests are located.\n   * Each integration test is a sub-directory, containing a complete test mill project.\n   */\n  def sources: Sources = T.sources(millSourcePath / \"src\")\n\n  /**\n   * Shared test resources, will be copied as-is into each test case working directory before the test in run.\n   */\n  def perTestResources: Sources = T.sources(millSourcePath / \"src-shared\")\n\n  /**\n   * The directories each representing a mill test case.\n   * Derived from [[sources]].\n   */\n  def testCases: T[Seq[PathRef]] = T {\n    for {\n      src <- sources() if src.path.toIO.isDirectory\n      d <- os.list(src.path)\n      if (d / \"build.sc\").toIO.isFile\n    } yield PathRef(d)\n  }\n\n  /**\n   * Run the integration tests.\n   */\n  def test(args: String*): Command[Seq[TestCase]] = T.command {\n    testTask(T.task {\n      args\n    })\n  }\n\n  /**\n   * Args to be used by [[testCached]].\n   */\n  def testCachedArgs: T[Seq[String]] = T {\n    Seq[String]()\n  }\n\n  /**\n   * Run the integration tests (same as `test`), but only if any input has changed since the last run.\n   */\n  def testCached: T[Seq[TestCase]] = T {\n    testTask(testCachedArgs)()\n  }"
+    },
+    "IntegrationTestRun": {
+      "commitId": "6ef7afe3a6c802babeaa5452d4d8b00f024bc342",
+      "result": {
+        "stdout": "TestInvocationResultSpec:\nde.tobiasroeser.mill.integrationtest.TestInvocationResult\n- should properly map to JSON and back\nTestResultSpec:\nde.tobiasroeser.mill.integrationtest.TestResult\n- should properly map to JSON and back\nMillIntegrationTestModuleSpec:\nde.tobiasroeser.mill.integrationtest.MillIntegrationTestModule\n- parseVersion should parse: 0.4.2-16-abed13\n- parseVersion should parse: 0.9.9\n- parseVersion should parse: 0.10.0-M2\n- parseVersion should parse: 0.10.0-M2-2-927d1fa\nRun completed in 261 milliseconds.\nTotal number of tests run: 6\nSuites: completed 3, aborted 0\nTests: succeeded 6, failed 0, canceled 0, ignored 0, pending 0\nAll tests passed.",
+        "stderr": "",
+        "returnCode": 0
+      },
+      "pass": true
+    }
+  }
+  
