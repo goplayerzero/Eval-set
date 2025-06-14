@@ -1,0 +1,19 @@
+{
+  "Repo": {
+    "remoteUrl": "https://github.com/aadityazero/test3.git",
+    "languages": ["js", "ts"]
+  },
+  "IntegrationTest": {
+    "fileContent": "const request = require('supertest');\nconst { spawn } = require('child_process');\n\nlet serverProcess;\nconst SERVER_URL = 'http://localhost:3000';\n\ndescribe('Integration: Express/Next.js server', () => {\n  beforeAll((done) => {\n    // Start the server as a child process\n    serverProcess = spawn('node', ['server.js'], {\n      cwd: process.cwd(),\n      env: { ...process.env, NODE_ENV: 'test' },\n      stdio: 'inherit',\n    });\n    // Wait for the server to be ready\n    setTimeout(done, 4000); // Wait 4s for server to boot\n  });\n\n  afterAll((done) => {\n    if (serverProcess) {\n      serverProcess.kill();\n    }\n    setTimeout(done, 1000);\n  });\n\n  it('should return 200 for GET /a', async () => {\n    const res = await request(SERVER_URL).get('/a');\n    expect(res.status).toBe(200);\n    expect(res.text).toContain('<!DOCTYPE html>'); // Next.js page should return HTML\n  });\n});\n"
+  },
+  "IntegrationTestRun": {
+    "id": "run-002",
+    "commitId": "26768c6a7830b434842b3334a80521d2bb8c8842",
+    "result": {
+      "stdout": " RUNS  tests/integration/server.test.js\n ⚠ Invalid next.config.js options detected: \n ⚠     Unrecognized key(s) in object: 'swcMinify'\n RUNS  tests/integration/server.test.js                                    \n ⨯ Middleware cannot be used with \"output: export\". See more info here: https://nextjs.org/docs/advanced-features/static-html-export\n RUNS  tests/integration/server.test.js\n RUNS  tests/integration/server.test.js\n FAIL  tests/integration/server.test.js (7.299 s)\n  Integration: Express/Next.js server  \n    ✕ should return 200 for GET /a (2084 ms)\n                                       \n  ● Integration: Express/Next.js server › should return 200 for GET /a\n                                       \n    expect(received).toBe(expected) // Object.is equality\n\n    Expected: 200\n    Received: 404\n\n      26 |   it('should return 200 for GET /a', async () => {\n      27 |     const res = await request(SERVER_URL).get('/a');\n    > 28 |     expect(res.status).toBe(200);\n         |                        ^\n      29 |     expect(res.text).toContain('<!DOCTYPE html>'); // Next.js page should return HTML\n      30 |   });\n      31 | });\n\n      at Object.toBe (tests/integration/server.test.js:28:24)\n\nTest Suites: 1 failed, 1 total\nTests:       1 failed, 1 total         \nSnapshots:   0 total\nTime:        7.338 s\nRan all test suites matching tests/integration/server.test.js.",
+      "stderr": "",
+      "returnCode": 1
+    },
+    "pass": false
+  }
+}
