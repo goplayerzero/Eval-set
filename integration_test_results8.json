@@ -1,0 +1,19 @@
+{
+    "Repo": {
+      "remoteUrl": "https://github.com/bazel-contrib/rules_bazel_integration_test.git",
+      "languages": ["bzl", "sh", "py"]
+    },
+    "IntegrationTest": {
+      "fileContent": "load(\"@bazel_binaries//:defs.bzl\", \"bazel_binaries\")\nload(\"@cgrindel_bazel_starlib//bzlformat:defs.bzl\", \"bzlformat_pkg\")\nload(\n    \"//bazel_integration_test:defs.bzl\",\n    \"bazel_integration_test\",\n    \"default_test_runner\",\n    \"integration_test_utils\",\n)\n\nbzlformat_pkg(name = \"bzlformat\")\n\ndefault_test_runner(name = \"simple_test_runner\")\n\nbazel_integration_test(\n    name = \"simple_test\",\n    bazel_binaries = bazel_binaries,\n    bazel_version = bazel_binaries.versions.current,\n    tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS + [\n        # Avoid file permssion error when using disk and repository cache after\n        # 7.0.0rc2 upgrade.\n        # https://github.com/bazelbuild/bazel/issues/19908\n        \"no-sandbox\",\n    ],\n    test_runner = \":simple_test_runner\",\n    workspace_files = integration_test_utils.glob_workspace_files(\"simple\") + [\n        \"//:shared_bazelrc_files\",\n    ],\n    workspace_path = \"simple\",\n)"
+    },
+    "IntegrationTestRun": {
+      "commitId": "777af2b05f9358de8ba7eadb5b15fcd015188891",
+      "result": {
+        "stdout": "Extracting Bazel installation...\nStarting local Bazel server (8.2.1) and connecting to it...\nWARNING: For repository 'buildifier_prebuilt', the root module requires module version buildifier_prebuilt@6.1.2, but got buildifier_prebuilt@7.3.1 in the resolved dependency graph. Please update the version in your MODULE.bazel or set --check_direct_dependencies=off\nINFO: Analyzed target //examples:simple_test (86 packages loaded, 1308 targets configured).\nINFO: Found 1 test target...                                                \nTarget //examples:simple_test up-to-date:                                     \n  bazel-bin/examples/simple_test                                              \nINFO: Elapsed time: 267.804s, Critical Path: 138.16s                          \nINFO: 8 processes: 6 internal, 2 local.                                       \nINFO: Build completed successfully, 8 total actions                           \n//examples:simple_test                                                   PASSED in 138.0s\n                                                                          \nExecuted 1 out of 1 test: 1 test passes.                                     \nThere were tests whose specified size is too big. Use the --test_verbose_timeout_warnings command line option to see which ones these are.",
+        "stderr": "",
+        "returnCode": 0
+      },
+      "pass": true
+    }
+  }
+  

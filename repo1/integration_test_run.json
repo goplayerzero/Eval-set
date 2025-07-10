@@ -1,0 +1,19 @@
+{
+  "Repo": {
+    "remoteUrl": "git@github.com:paulinatester/pytest-unit-integration-end2end.git",
+    "languages": ["py"]
+  },
+  "IntegrationTest": {
+    "fileContent": "import main\n\ndef test_add_integration():         \n    result = main.add(2, 3)\n    assert result == 5\n\ndef test_subtract_integration():\n    result = main.subtract(5, 3)\n    assert result == 2\n\ndef test_multiply_integration():\n    result = main.multiply(2, 4)\n    assert result == 8\n\ndef test_divide_integration():\n    result = main.divide(6, 2)\n    assert result == 3\n\ndef test_divide_by_zero_integration():\n    try:\n        main.divide(5, 0)\n        assert False, \"No exception raised\"\n    except ValueError as e:\n        assert str(e) == \"Cannot divide by zero\"\n\ndef test_api_endpoint_integration(sample_data):\n    result = main.api_endpoint(sample_data)\n    assert \"Processed\" in result\n    assert sample_data in result"
+  },
+  "IntegrationTestRun": {
+    "id": "run-001",
+    "commitId": "bc209ef9e0c9f3ebdd2cc595306cb6f03ff7bd53",
+    "result": {
+      "stdout": "======================================= test session starts =======================================\nplatform darwin -- Python 3.12.9, pytest-8.4.0, pluggy-1.5.0\nrootdir: /Users/aadityasubedi/integration test/Data2/pytest-unit-integration-end2end\nplugins: anyio-4.8.0, langsmith-0.3.19\ncollected 6 items                                                                                 \n\ntests/integration/test_integrations.py ......\n\n======================================== 6 passed in 0.01s ========================================\n",
+      "stderr": "",
+      "returnCode": 0
+    },
+    "pass": true
+  }
+}

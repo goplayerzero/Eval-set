@@ -1,0 +1,6 @@
+com/alexnederlof/inttesting/suites/FastTests.class
+com/alexnederlof/inttesting/SimpleSeleniumTest.class
+com/alexnederlof/inttesting/suites/IntegrationTestSuite.class
+com/alexnederlof/inttesting/DummyUnitTest.class
+com/alexnederlof/inttesting/MultiBrowserTest.class
+com/alexnederlof/inttesting/SlowTest.class

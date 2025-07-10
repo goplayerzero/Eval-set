@@ -1,0 +1,19 @@
+{
+  "Repo": {
+    "remoteUrl": "https://github.com/aadityazero/test3.git",
+    "languages": ["js", "ts"]
+  },
+  "IntegrationTest": {
+    "fileContent": "import demoMenuReducer from '../../src/store/reducers/demoMenuReducer';\n\ndescribe('Integration: demoMenuReducer workflow', () => {\n  it('returns the initial state', () => {\n    expect(demoMenuReducer(undefined, {})).toEqual({ menuItems: null });\n  });\n\n  it('handles RECEIVE_DEMO_MENU action', () => {\n    const prevState = { menuItems: null };\n    const action = { type: 'RECEIVE_DEMO_MENU', payload: ['item1', 'item2'] };\n    expect(demoMenuReducer(prevState, action)).toEqual({ menuItems: ['item1', 'item2'] });\n  });\n\n  it('returns previous state for unknown action', () => {\n    const prevState = { menuItems: ['item1'] };\n    const action = { type: 'UNKNOWN_ACTION' };\n    expect(demoMenuReducer(prevState, action)).toEqual(prevState);\n  });\n});\n"
+  },
+  "IntegrationTestRun": {
+    "id": "run-04",
+    "commitId": "26768c6a7830b434842b3334a80521d2bb8c8842",
+    "result": {
+      "stdout": " PASS  tests/integration/demoMenuReducerWorkflow.test.js\n  Integration: demoMenuReducer workflow                 \n    ✓ returns the initial state (1 ms)                  \n    ✓ handles RECEIVE_DEMO_MENU action (1 ms)           \n    ✓ returns previous state for unknown action         \n                                                        \nTest Suites: 1 passed, 1 total                          \nTests:       3 passed, 3 total                          \nSnapshots:   0 total\nTime:        0.307 s\nRan all test suites matching tests/integration/demoMenuReducerWorkflow.test.js.",
+      "stderr": "",
+      "returnCode": 0
+    },
+    "pass": true
+  }
+}

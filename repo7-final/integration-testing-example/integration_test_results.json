@@ -1,0 +1,19 @@
+{
+  "Repo": {
+    "remoteUrl": "git@github.com:alexnederlof/integration-testing-example.git",
+    "languages": ["java", "html"]
+  },
+  "IntegrationTest": {
+    "fileContent": "package com.alexnederlof.inttesting.suites;\n\nimport org.junit.AfterClass;\nimport org.junit.BeforeClass;\nimport org.junit.extensions.cpsuite.ClasspathSuite;\nimport org.junit.extensions.cpsuite.ClasspathSuite.BaseTypeFilter;\nimport org.junit.runner.RunWith;\n\nimport com.alexnederlof.inttesting.MultiBrowserTest;\nimport com.alexnederlof.inttesting.MyWebServer;\n\n/**\n * A suite that starts the server beforehand, and closes the server after the\n * tests have run.\n */\n@RunWith(ClasspathSuite.class)\n@BaseTypeFilter(MultiBrowserTest.class)\npublic class IntegrationTestSuite {\n\tprivate static MyWebServer server;\n\t@BeforeClass\n\tpublic static void startServer() throws Exception {\n\t\tserver = new MyWebServer();\n\t\tserver.start();\n\t}\n\t@AfterClass\n\tpublic static void shutDownServer() throws Exception {\n\t\tserver.stop();\n\t}\n}\n"
+  },
+  "IntegrationTestRun": {
+    "id": "run-002",
+    "commitId": "e32c3695c4409a52d334c1996368cd79a4fe6ef8",
+    "result": {
+      "stdout": "Tests run: 3, Failures: 0, Errors: 0, Skipped: 2\n\n2025-06-13 11:12:39.644:INFO:oejs.Server:main: jetty-9.0.0.M2\n2025-06-13 11:12:39.681:INFO:oejs.ServerConnector:main: Started ServerConnector@a67c67e{HTTP/1.1}{0.0.0.0:9090}\n2025-06-13 11:12:39.739:INFO:oejw.StandardDescriptorProcessor:main: NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet\n2025-06-13 11:12:39.743:INFO:oejsh.ContextHandler:main: started o.e.j.w.WebAppContext@33b37288{/,file:/Users/aadityasubedi/Desktop/eval-set/repo7/integration-testing-example/src/main/webapp/,AVAILABLE}{/Users/aadityasubedi/Desktop/eval-set/repo7/integration-testing-example/src/main/webapp}\n2025-06-13 11:12:39.756:INFO:oejs.Server:main: Graceful shutdown org.eclipse.jetty.server.Server@23bb8443 by  Fri Jun 13 11:13:09 PDT 2025\n2025-06-13 11:12:39.758:INFO:oejs.ServerConnector:main: Stopped ServerConnector@a67c67e{HTTP/1.1}{0.0.0.0:9090}\n2025-06-13 11:12:39.760:INFO:oejsh.ContextHandler:main: stopped o.e.j.w.WebAppContext@33b37288{/,file:/Users/aadityasubedi/Desktop/eval-set/repo7/integration-testing-example/src/main/webapp/,UNAVAILABLE}{/Users/aadityasubedi/Desktop/eval-set/repo7/integration-testing-example/src/main/webapp}",
+      "stderr": "",
+      "returnCode": 0
+    },
+    "pass": true
+  }
+}
