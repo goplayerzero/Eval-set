@@ -1,0 +1,35 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+
+# Environment / editor files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Secrets & env files
+.env
+*.env
+
+# Build / dist
+build/
+dist/
+
+# Caches & coverage
+.mypy_cache/
+.pytest_cache/
+coverage/
+
+# Project-specific large or generated data
+repos_database_export.json
+data/
+test_results/
+
+# Docker volumes / workspace scratch
+repo_test_*/
+*.log
